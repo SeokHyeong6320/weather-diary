@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import zerobase.weather.domain.DateWeather;
 import zerobase.weather.domain.DiaryInfo;
 import zerobase.weather.dto.DiaryDto;
 import zerobase.weather.service.DiaryService;
+import zerobase.weather.service.WeatherService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,6 +24,7 @@ import static org.springframework.format.annotation.DateTimeFormat.ISO.*;
 public class DiaryController {
 
     private final DiaryService diaryService;
+    private final WeatherService weatherService;
 
     @PostMapping("/create/diary")
     public void createDiary(
@@ -29,7 +32,8 @@ public class DiaryController {
             @RequestParam String text
     ) {
 
-        diaryService.createDiary(date, text);
+        DateWeather dateWeather = weatherService.getDateWeatherFromDb(date);
+        diaryService.createDiary(dateWeather, text);
     }
 
     @GetMapping("/read/diary")
