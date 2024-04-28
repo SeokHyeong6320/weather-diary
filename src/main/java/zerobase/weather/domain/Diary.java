@@ -4,17 +4,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Diary {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +27,18 @@ public class Diary {
     private String text;
 
     private LocalDate date;
+
+    public static Diary createNewDiary
+            (DateWeather dateWeather, String text) {
+
+        return Diary.builder()
+                .weather(dateWeather.getWeather())
+                .icon(dateWeather.getIcon())
+                .temperature(dateWeather.getTemperature())
+                .text(text)
+                .date(dateWeather.getDate())
+                .build();
+    }
+
 
 }
