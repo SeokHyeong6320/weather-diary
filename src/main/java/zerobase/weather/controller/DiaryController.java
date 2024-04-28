@@ -9,9 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import zerobase.weather.domain.DiaryInfo;
+import zerobase.weather.dto.DiaryDto;
 import zerobase.weather.service.DiaryService;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.format.annotation.DateTimeFormat.*;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.*;
@@ -29,7 +33,16 @@ public class DiaryController {
     ) {
 
         diaryService.createDiary(date, text);
+    }
 
+    @GetMapping("/read/diary")
+    public List<DiaryInfo> readDiary
+            (@RequestParam @DateTimeFormat(iso = DATE) LocalDate date) {
+
+        List<DiaryDto> diaryInfos =  diaryService.readDiary(date);
+        return diaryInfos.stream()
+                .map(DiaryInfo::fromDto)
+                .collect(Collectors.toList());
     }
 
 }

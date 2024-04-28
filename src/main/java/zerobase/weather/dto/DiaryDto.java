@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import zerobase.weather.domain.Diary;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -28,6 +29,17 @@ public class DiaryDto {
     private String text;
 
     private LocalDate date;
+
+
+    public static DiaryDto fromEntity(Diary diary) {
+        return DiaryDto.builder()
+                .weather(diary.getWeather())
+                .icon(diary.getIcon())
+                .temperature(diary.getTemperature())
+                .text(diary.getText())
+                .date(diary.getDate())
+                .build();
+    }
 
 
 

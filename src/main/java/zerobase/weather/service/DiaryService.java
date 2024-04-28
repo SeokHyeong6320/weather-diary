@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zerobase.weather.domain.DateWeather;
 import zerobase.weather.domain.Diary;
+import zerobase.weather.domain.DiaryInfo;
+import zerobase.weather.dto.DiaryDto;
 import zerobase.weather.repositpry.DateWeatherRepository;
 import zerobase.weather.repositpry.DiaryRepository;
 
@@ -21,7 +23,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -115,4 +119,11 @@ public class DiaryService {
     }
 
 
+    public List<DiaryDto> readDiary(LocalDate date) {
+
+        return diaryRepository
+                .findAllByDate(date).stream()
+                .map(DiaryDto::fromEntity)
+                .collect(Collectors.toList());
+    }
 }
