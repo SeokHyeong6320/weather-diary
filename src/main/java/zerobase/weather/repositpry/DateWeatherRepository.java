@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import zerobase.weather.domain.DateWeather;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Repository

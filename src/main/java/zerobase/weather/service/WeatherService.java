@@ -8,6 +8,8 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import zerobase.weather.aop.TraceLog;
 import zerobase.weather.domain.DateWeather;
 import zerobase.weather.repositpry.DateWeatherRepository;
 
@@ -20,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class WeatherService {
 
@@ -28,12 +31,14 @@ public class WeatherService {
     @Value("${openweathermap.key}")
     private String apiKey;
 
+    @TraceLog
     public DateWeather getDateWeatherFromDb(LocalDate date) {
         return dateWeatherRepository
                 .findByDate(date)
                 .orElse(getDateWeatherFromApi());
     }
 
+    @TraceLog
     @Scheduled(cron = "0 0 1 * * *")
     public void saveDailyWeather() {
         dateWeatherRepository.save(getDateWeatherFromApi());
