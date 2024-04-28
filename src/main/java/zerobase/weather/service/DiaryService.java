@@ -1,7 +1,6 @@
 package zerobase.weather.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zerobase.weather.domain.DateWeather;
 import zerobase.weather.domain.Diary;
-import zerobase.weather.domain.DiaryInfo;
 import zerobase.weather.dto.DiaryDto;
 import zerobase.weather.repositpry.DateWeatherRepository;
 import zerobase.weather.repositpry.DiaryRepository;
@@ -125,5 +123,15 @@ public class DiaryService {
                 .findAllByDate(date).stream()
                 .map(DiaryDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    public void updateDiary(LocalDate date, String text) {
+        diaryRepository
+                .findFirstByDate(date).orElseThrow()
+                .updateText(text);
+    }
+
+    public void deleteDiary(LocalDate date) {
+        diaryRepository.deleteAllByDate(date);
     }
 }

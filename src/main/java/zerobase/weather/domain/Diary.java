@@ -9,7 +9,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -38,6 +38,10 @@ public class Diary {
                 .text(text)
                 .date(dateWeather.getDate())
                 .build();
+    }
+
+    public void updateText(String text) {
+        this.text = text;
     }
 
 
