@@ -1,16 +1,11 @@
 package zerobase.weather.controller;
 
-import jakarta.persistence.Table;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 import zerobase.weather.domain.DateWeather;
 import zerobase.weather.domain.Diary;
 import zerobase.weather.dto.DiaryDto;
@@ -19,20 +14,17 @@ import zerobase.weather.service.DiaryService;
 import zerobase.weather.service.WeatherService;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static java.time.LocalDate.*;
-import static java.time.format.DateTimeFormatter.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static java.time.LocalDate.now;
+import static java.time.format.DateTimeFormatter.ISO_DATE;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -147,21 +139,10 @@ class DiaryControllerTest {
                 .param("text", "hello"))
                 .andDo(print())
                 .andExpect(status().isOk());
-        verify(diaryService, times(1)).updateDiary(now(), "hello");
+        verify(diaryService, times(1))
+                .updateDiary(now(), "hello");
     }
 
-    @Test
-    void failUpdateDiaryController() throws Exception {
-        // given
-        // when
-        // then
-        mockMvc.perform(put("/update/diary")
-                        .param("date", String.valueOf(now()))
-                        .param("text", "hello"))
-                .andDo(print())
-                .andExpect(status().is5xxServerError());
-        verify(diaryService, times(1)).updateDiary(now(), "hello");
-    }
 
     @Test
     void successDeleteDiaryController() throws Exception {

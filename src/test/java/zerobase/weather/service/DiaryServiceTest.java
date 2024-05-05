@@ -1,6 +1,5 @@
 package zerobase.weather.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,15 +13,15 @@ import zerobase.weather.domain.Diary;
 import zerobase.weather.dto.DiaryDto;
 import zerobase.weather.repositpry.DiaryRepository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-import static java.time.LocalDate.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static java.time.LocalDate.now;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -73,6 +72,7 @@ class DiaryServiceTest {
     }
 
     @Test
+    @DisplayName("일기 열람 성공")
     void successReadDiary() throws Exception {
         // given
         Diary diary1 = Diary.builder()
@@ -105,7 +105,37 @@ class DiaryServiceTest {
         assertThat(dtos.get(1).getTemperature()).isEqualTo(22.22);
         assertThat(dtos.get(1).getText()).isEqualTo("text2");
         assertThat(dtos.get(1).getDate()).isEqualTo(now());
+    }
+
+    @Test
+    @DisplayName("일기 수정 성공")
+    void successUpdateDiary() throws Exception {
+        // given
+        Diary mockDiary = mock(Diary.class);
+
+        given(diaryRepository.findFirstByDate(any()))
+                .willReturn(Optional.of(mockDiary));
+
+        // when
+        diaryService.updateDiary(now(), "text2");
+
+        // then
+        verify(mockDiary, times(1)).updateText("text2");
+    }
+
+    @Test
+    @DisplayName("일기 삭제 성공")
+    void successDeleteDiary() throws Exception {
+        // given
+        // when
+        diaryService.deleteDiary(now());
+
+        // then
+        verify(diaryRepository, times(1))
+                .deleteAllByDate(now());
 
     }
+
+
 
 }
