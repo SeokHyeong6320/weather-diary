@@ -10,8 +10,8 @@ public class GlobalExceptionHandler {
 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ServiceException.class)
-    public ErrorResult diaryExceptionHandler(ServiceException e) {
+    @ExceptionHandler(NoDiaryException.class)
+    public ErrorResult diaryExceptionHandler(NoDiaryException e) {
         return new ErrorResult("HttpStatus.BAD_REQUEST", e.getMessage());
     }
 
