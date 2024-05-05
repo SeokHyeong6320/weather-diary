@@ -7,6 +7,7 @@ import zerobase.weather.aop.TraceLog;
 import zerobase.weather.domain.DateWeather;
 import zerobase.weather.domain.Diary;
 import zerobase.weather.dto.DiaryDto;
+import zerobase.weather.exception.NoDiaryException;
 import zerobase.weather.repositpry.DiaryRepository;
 
 import java.time.LocalDate;
@@ -38,7 +39,7 @@ public class DiaryService {
     @TraceLog
     public void updateDiary(LocalDate date, String text) {
         diaryRepository
-                .findFirstByDate(date).orElseThrow()
+                .findFirstByDate(date).orElseThrow(() -> new NoDiaryException("해당 날짜의 일기가 없습니다"))
                 .updateText(text);
     }
 
