@@ -1,24 +1,27 @@
 package zerobase.weather.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NoDiaryException.class)
-    public ErrorResult diaryExceptionHandler(NoDiaryException e) {
-        return new ErrorResult("HttpStatus.BAD_REQUEST", e.getMessage());
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<ErrorResult> diaryExceptionHandler(ServiceException e) {
+        ErrorResult errorResult = new ErrorResult("HttpStatus.BAD_REQUEST", e.getMessage());
+
+        return new ResponseEntity<>(errorResult, HttpStatus.resolve(e.getStatusCode()));
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+
     @ExceptionHandler(Exception.class)
-    public ErrorResult globalExceptionHandler(Exception e) {
-        return new ErrorResult("HttpStatus.INTERNAL_SERVER_ERROR", e.getMessage());
+    public ResponseEntity<ErrorResult> globalExceptionHandler(Exception e) {
+        ErrorResult errorResult = new ErrorResult("HttpStatus.INTERNAL_SERVER_ERROR", e.getMessage());
+
+        return new ResponseEntity<>(errorResult, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 

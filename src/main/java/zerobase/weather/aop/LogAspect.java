@@ -32,7 +32,7 @@ public class LogAspect {
             return result;
         } catch (Throwable e) {
             logger.error("error! {}", joinPoint.getSignature(), e);
-            throw new RuntimeException(e);
+            throw e;
         }
     }
 
