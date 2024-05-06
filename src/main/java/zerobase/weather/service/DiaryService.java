@@ -21,6 +21,7 @@ public class DiaryService {
 
     private final DiaryRepository diaryRepository;
 
+    @TraceLog
     public void createDiary(DateWeather dateWeather, String text) {
 
         diaryRepository.save(Diary.createNewDiary(dateWeather, text));
